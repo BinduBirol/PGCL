@@ -1,0 +1,585 @@
+var p_customer_id="";
+var p_month="";
+var p_year="";
+var p_area_id="";
+var p_customer_category="";
+var p_bill_id="";
+
+var bill_ids= [];
+var surcharge_amounts=0;
+var bill_amounts=0;
+var ibilledAmounts=[];
+var iSurchargeAmounts=[];
+var iPayableAmounts=[];
+var months=[];
+var years=[];
+var net_payable=0;
+var count=0;
+var taxs=[];
+var total_tax_amount= 0;
+
+
+$(document).off().on('keypress', function(e) {	
+	var key = e.which;
+		if (key == 13) {
+			//e.preventDefault();
+			if ($("#net_collected").val() != "0") {
+				$("#btn_save").click();
+				//saveCollection();	
+				
+			} else {
+				reloadBillGrid();
+				// e.preventDefault();
+			}
+			return false;
+		}
+	
+});
+
+$("#bill_grid").jqGrid($.extend(true, {}, scrollPagerGridOptions, {
+	url: jsEnum.GRID_RECORED_FETCHER+'?service=org.pgcl.models.BillingService&method=getBillsForBankUser',
+   	jsonReader: {
+            repeatitems: false,
+            id: "bill_id"
+	},
+   colNames: ['bill_id','month','year','Month Year', 'Billed amount','Surcharge amount','Payable amount'],
+   colModel: 	[
+				{
+				    name: 'bill_id',
+				    index: 'bill_id',
+				    width:90,
+				    align:'left',
+				    hidden:true,
+				    sorttype: 'string',
+				    search: true
+				},
+				
+				{
+				    name: 'bill_month',
+				    index: 'bill_month',
+				    width:90,
+				    align:'left',
+				    hidden:true,
+				    sorttype: 'string',
+				    search: true
+				},
+				
+				{
+				    name: 'bill_year',
+				    index: 'bill_year',
+				    width:90,
+				    align:'left',
+				    hidden:true,
+				    sorttype: 'string',
+				    search: true
+				},
+				{
+	                name: 'bill_month_year',
+	                index: 'bill_month_year',
+	                width:60,
+	                align:'left',
+	                sorttype: 'string',
+	                search: true
+            	},
+            	{
+	                name: 'billed_amount',
+	                index: 'billed_amount',
+	                align:'right',
+	                width:60,
+	                sorttype: "number",
+	                search: true,
+            	},
+            	
+            	
+            	{
+	                name: 'surcharge_actual',
+	                index: 'surcharge_actual',
+	                sorttype: "number",
+	                align:'right',
+	                width:60,
+	                search: true,
+            	},
+            	
+            	{
+	                name: 'net_payable_amount',
+	                index: 'net_payable_amount',
+	                sorttype: "number",	                
+	                align:'right',
+	                width:60,
+	                search: false,
+            	}
+            	
+            	],
+	datatype: 'local',	
+	width: $("#grid_width").width() ,
+   	pager: '#bill_grid_pager',
+   	sortname: 'bill_id',
+    sortorder: "asc",
+    multiselect: true,
+    footerrow:true, 
+	userDataOnFooter:true,
+    loadComplete: function (data) {   
+    	 $("#bill_grid_pager table.navtable tbody tr").append ( 
+ 		'<td><div id="tax_btn" hidden=true><input type="checkbox"  class="for_tax"  id="for_tax"/>&nbsp;&nbsp;Tax/Chalan Adjustment</div></td>');
+        //$("#cb_" + this.id).click(); 
+    	var idarray = jQuery('#bill_grid').jqGrid('getDataIDs');
+    	var idarray = jQuery('#bill_grid').jqGrid('getDataIDs');
+    	var is_metered= $("#isMetered_str").val();
+    	var checkbox = $("input[type='checkbox']");
+    	
+        if (idarray.length > 0 && is_metered==1) { 	   
+        	var firstid = jQuery('#bill_grid').jqGrid('getDataIDs')[0];
+            $("#bill_grid").setSelection(firstid);
+            
+            checkbox.attr("disabled", true);
+            $("#for_tax").attr("disabled", false);            
+            //checkbox.hide();            
+            $("#tax_btn").show();        
+   
+            $("#for_tax").change(function() {
+                if ($(this).is(':checked')) {                	
+                    $("#tax_amount_div").show();                   
+                }
+                else {
+                	$("#tax_amount_div").hide();                	
+                	$("#gridName").unblock();
+                }
+            });
+                     
+        }else{
+        	checkbox.attr("disabled", false);
+        	$("#cb_" + this.id).click(); 
+        	$("#tax_amount_div").hide();
+        	$("#tax_btn").hide();
+        }
+    },
+	caption: "Due bills",
+	loadonce: true,	
+	
+	onSelectRow : function(id){ 		
+		calculateCollection();
+    },
+    onSelectAll : function(id){ 	
+		calculateCollection();
+    }
+	
+}));
+
+	
+function calculateCollection(){
+	
+
+	bill_ids = [];
+	ibilledAmounts = [];
+	iSurchargeAmounts = [];
+	iPayableAmounts = [];
+	months = [];
+	years = [];
+	surcharge_amounts = 0;
+	bill_amounts = 0;
+	net_payable = 0;
+	count = 0;
+	taxs=[];
+	total_tax_amount= 0;
+	
+	$("#net_payable").val(0);
+    $("#net_collected").val(0);
+    $("#t_billed_amount").val(0);
+    $("#t_surcharge_amount").val(0);
+    $("#bill_ids").val("");
+    $("#billed_amounts").val("");
+    $("#surcharge_amounts").val("");  
+    $("#months").val("");
+    $("#years").val("");
+    $("#payable_amounts").val("");
+    
+    
+		var grid = $("#bill_grid");
+		var rowKey = grid.getGridParam("selrow");	
+		
+		var $newgrid = $("#bill_grid"), selIds = $newgrid.jqGrid("getGridParam", "selarrrow"), i, n;		
+		//if(selIds.length>0)		$("#tax_label").append("Tax Amount/ Chalan No/ Chalan Date "+$newgrid.jqGrid("getCell", selIds[0], "bill_month_year"));
+		
+		for (i = 0, n = selIds.length; i < n; i++) {
+			
+			bill_ids.push($newgrid.jqGrid("getCell", selIds[i], "bill_id"));
+			ibilledAmounts.push($newgrid.jqGrid("getCell", selIds[i], "billed_amount"));
+			iSurchargeAmounts.push($newgrid.jqGrid("getCell", selIds[i], "surcharge_actual"));
+			months.push($newgrid.jqGrid("getCell", selIds[i], "bill_month"));
+			years.push($newgrid.jqGrid("getCell", selIds[i], "bill_year"));
+			iPayableAmounts.push($newgrid.jqGrid("getCell", selIds[i], "net_payable_amount"));			
+			
+			bill_amounts+= parseInt($newgrid.jqGrid("getCell", selIds[i], "billed_amount"));			
+			surcharge_amounts+= parseInt($newgrid.jqGrid("getCell", selIds[i], "surcharge_actual"));			
+			net_payable+= parseInt($newgrid.jqGrid("getCell", selIds[i], "net_payable_amount"));			
+			
+			count++;
+		}
+		total_tax_amount= parseInt($("#tax_amount").val());
+		net_payable= net_payable-total_tax_amount;
+	    
+	     //$("#net_payable").val(net_payable);
+	     $("#net_collected").val(net_payable.toLocaleString());
+	     $("#t_billed_amount").val(bill_amounts);
+	     $("#t_surcharge_amount").val(surcharge_amounts);
+	     $("#bill_ids").val(bill_ids.join("#"));
+	     $("#billed_amounts").val(ibilledAmounts.join("#"));
+	     $("#surcharge_amounts").val(iSurchargeAmounts.join("#"));
+	     $("#months").val(months.join("#"));
+	     $("#years").val(years.join("#"));
+	     $("#payable_amounts").val(iPayableAmounts.join("#"));  
+	     $("#tax_amounts").val(taxs.join("#"));
+	     
+
+
+	$("#bill_grid").jqGrid("footerData", "set", {
+		bill_month_year : "Total ("+count+"):",
+		billed_amount : bill_amounts.toLocaleString()+" Tk",
+		surcharge_actual : surcharge_amounts.toLocaleString()+" Tk",
+		tax_amount: total_tax_amount.toLocaleString()+" Tk",
+		net_payable_amount : net_payable.toLocaleString()+" Tk"
+	}); 
+	
+     
+     // //////////////////
+//});
+};
+
+jQuery("#bill_grid").jqGrid('navGrid','#bill_grid_pager',$.extend({},footerButton,{search:false,refresh:false}),{},{},{},{multipleSearch:true});
+
+
+
+gridColumnHeaderAlignment("left","bill_grid",["full_name"]);
+
+
+
+
+
+function reloadBillGrid() {	
+
+	getBillingInfo($('#customer_id').val());
+    
+	var ruleArray = [ [ "customer_id" ], [ "eq" ],
+			[ $('#customer_id').val() ] ];
+	var $grid = $('#bill_grid');
+	var caption_extra = "";
+
+	var postdata = getPostFilter("bill_grid", ruleArray);
+	$("#bill_grid").jqGrid('setGridParam', {
+		search : true,
+		postData : postdata,
+		page : 1,
+		datatype : 'json'
+	});
+	reloadGrid("bill_grid");
+	
+	
+	
+	
+
+	$grid
+			.jqGrid('setCaption', 'Due bill list for - '
+					+ $('#customer_id').val());
+}
+
+
+
+function valiateFields() {
+	var isValid = true;
+	var bill_for = getRadioCheckedValue("bill_parameter\\.bill_for");
+
+	if (bill_for == "area_wise")
+		isValid = validateField("area_id", "issue_date");
+	else if (bill_for == "category_wise")
+		isValid = validateField("area_id", "customer_category", "issue_date");
+	else if (bill_for == "individual_customer")
+		isValid = validateField("customer_id", "issue_date");
+
+	if (isValid == true)
+		isValid = validateField("billing_month", "billing_year");
+
+	return isValid;
+}
+
+$("#customer_id").unbind();
+
+$("#customer_id").autocomplete($.extend(true, {}, acMCustomerOption, {
+	serviceUrl : sBox.CUSTOMER_LIST,
+	onSelect : function() {
+
+		getCustomerInfo("", $('#customer_id').val());
+		reloadBillGrid();
+		calculateCollection();
+	},
+}));
+
+$("#collection_date").datepicker({ dateFormat: "dd-mm-yy" }).val();
+$("#collection_date").datepicker().datepicker("setDate", new Date());
+$("#tax_date").datepicker({ dateFormat: "dd-mm-yy" }).val();
+
+reloadBillGrid();
+
+function unlockDatabase() {
+	disableButton("btn_unlockDB");
+	$.ajax({
+		url : 'unlockDatabase.action',
+		type : 'POST',
+		data : {
+			isMetered : $("#isMeter").val()
+		},
+		cache : false,
+		success : function(response) {
+			enableButton("btn_unlockDB");
+			$.jgrid.info_dialog(response.dialogCaption, response.message,
+					jqDialogClose, jqDialogParam);
+		}
+
+	});
+
+}
+/*
+Calendar.setup({
+	inputField : "collection_date",
+	trigger : "collection_date",
+	eventName : "focus",
+	onSelect : function() {
+		this.hide();
+	},
+	showTime : 12,
+	dateFormat : "%d-%m-%Y",
+	showTime : true
+	
+	
+});
+*/
+
+
+
+
+function saveCollection() {
+
+	var formData = new FormData($('form')[0]);
+	var c=0;
+	if (bill_ids.toString() != null&&c==0) {
+		$.ajax({
+			url : 'saveBillCollectionBank.action',
+			type : 'POST',
+			data : formData,
+			async : false,
+			cache : false,
+			contentType : false,
+			processData : false,
+			success : function(response) {
+
+				/*
+				 * $.jgrid.info_dialog(response.dialogCaption, response.message,
+				 * jqDialogClose, jqDialogParam);
+				 */
+				//alert(response.message);
+				
+				resetFields();
+				reloadDailyCollGrid();
+				$("#resp_msg").html("<b style='color:green;background-color:white;box-shadow: 3px 3px;font-size:20px'>"+response.message+"</b>");				
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+                if (jqXHR.status == 500) {
+                    alert('Internal error: ' + jqXHR.responseText);
+                } else {
+                    alert('Unexpected error.');
+                }
+            }
+
+		});
+		c++;
+		
+	}
+	$('#resp_msg').delay(5000).fadeOut();
+}
+
+////get customer info
+function getBillingInfo(customer_id) {
+	
+	$("#customer_id_r").val("");
+	$("#customer_name").val("");
+	$("#category_name").val("");
+	$("#category_id").val("");
+	$("#area_name").val("");
+	$("#mobile").val("");
+	$("#phone").val("");
+	$("#mobile_old").val("");
+	$("#phone_old").val("");
+	$("#customerType").val("");
+	$("#isMetered_str").val("");
+	$("#address").val("");
+	$("#msg").val("");
+	
+	
+	
+	$.ajax({
+		type : 'POST',
+		url : 'getCustomerInfoAsJson.action',
+		data : {
+			customer_id : customer_id
+		},
+		success : function(data) {
+
+			if (typeof data === "undefined") {
+				$("#customer_id_r").val("Invalid Customer Code.");
+			}
+			$("#customer_id_r").val(data.personalInfo.customer_id);
+			$("#customer_name").val(data.personalInfo.full_name);
+			$("#category_name").val(data.customer_category_name);
+			$("#category_id").val(data.customer_category);
+			$("#area_name").val(data.area_name);
+			//$("#father_name").val(data.personalInfo.father_name);
+			$("#mobile").val(data.personalInfo.mobile);
+			$("#phone").val(data.personalInfo.phone);
+
+			$("#mobile_old").val(data.personalInfo.mobile);
+			$("#phone_old").val(data.personalInfo.phone);
+
+			$("#customerType").val(data.connectionInfo.isMetered);
+			$("#isMetered_str").val(data.connectionInfo.isMetered_str);
+
+			$("#address").val(getCustomerAddress(data.addressInfo));
+
+		},
+		error : function() {
+			$("#msg").val("<b>Error</b>");
+		}
+	});
+}
+function resetFields(){
+	$("input, textarea").val("");
+	$('#for_tax').prop('checked', false);
+	reloadBillGrid();
+	$('#customer_id').focus();
+	$("#collection_date").datepicker({ dateFormat: "dd-mm-yy" }).val();
+	$("#collection_date").datepicker().datepicker("setDate", new Date());
+	$("#tax_amount").val(0);
+};
+
+///instruction
+function showShortCuts(){
+	var shortcuts="<div style='text-align:left;margin-left:20px;'>\r\n\t<p class= \"alert alert-danger\">When <b>collectable amount</b> field's value is grater than <b>0</b> , by pressing <b>Enter</b> key you can save collection</p>\r\n\t<p class= \"alert alert-danger\">Else, <b>Enter</b> key will always get customer information.</p>\r\n\t<p class= \"alert alert-danger\">Be careful with the customers, who are not from your designated area</p>\r\n</div>";
+	$.jgrid.info_dialog("Keyboard Shortcuts",shortcuts,jqDialogClose,jqDialogParam);
+}
+
+
+
+/////////////starts daily collection grid///////////
+$("#daily_coll_grid").jqGrid($.extend(true, {}, scrollPagerGridOptions, {
+	url: jsEnum.GRID_RECORED_FETCHER+'?service=org.pgcl.models.BillingService&method=getDailyCollectionForBankUser',
+   	jsonReader: {
+            repeatitems: false,
+            id: "bill_id"
+	},
+   colNames: ['Customer ID','PARTICULARS','Account No','Total Collected','Time'],
+   colModel: 	[
+				{
+				    name: 'customer_id',
+				    index: 'customer_id',
+				    width:60,
+				    align:'center',				    
+				    sorttype: 'string',
+				    search: true
+				},
+				
+				{
+				    name: 'bill_month_year',
+				    index: 'bill_month_year',
+				    width:90,
+				    align:'left',				    
+				    sorttype: 'string',
+				    search: true
+				},
+				
+				{
+				    name: 'account_no',
+				    index: 'account_no',
+				    width:90,
+				    align:'center',				   
+				    sorttype: 'string',
+				    search: true
+				},				            	
+            	
+            	{
+	                name: 'collected_payable_amount',
+	                index: 'collected_payable_amount',
+	                sorttype: "number",
+	                align:'right',
+	                width:60,
+	                search: true,
+            	},      
+            	{
+	                name: 'remarks',
+	                index: 'remarks',
+	                sorttype: "string",	                
+	                align:'center',
+	                width:60,
+	                search: false,
+            	}
+            	
+            	],
+	datatype: 'local',	
+	width: $("#content_div").width() ,
+   	pager: '#daily_coll_grid_pager',
+   	sortname: 'customer_id',
+    sortorder: "asc",
+    footerrow:true, 
+	userDataOnFooter:true,
+    loadComplete: function () {
+    	
+       
+    	calculateDailyCollectionGrid();
+    },
+	caption: "Today's Collection information",
+	loadonce: true
+	
+	
+	
+}));
+
+function reloadDailyCollGrid() {
+	
+	var ruleArray = [ ["bank_id","branch_id" ], ["eq","eq" ],
+			[ $("#bank_id").val(),$("#branch_id").val() ] ];
+	var $grid = $('#daily_coll_grid');
+
+	var postdata = getPostFilter("daily_coll_grid", ruleArray);
+	$("#daily_coll_grid").jqGrid('setGridParam', {
+		search : true,
+		postData : postdata,
+		page : 1,
+		datatype : 'json'
+	});
+	
+	
+	reloadGrid("daily_coll_grid");
+}
+
+function calculateDailyCollectionGrid(){
+	var total_collected= 0;
+	var count_t= 0;
+	var $grid = $('#daily_coll_grid');
+	
+    total_collected = $grid.jqGrid('getCol', 'collected_payable_amount', false, 'sum');
+    count_t= $grid.jqGrid('getGridParam', 'records');
+	
+	$("#daily_coll_grid").jqGrid("footerData", "set", {
+		customer_id : "Total ("+count_t+"):",
+		collected_payable_amount :""+ total_collected.toLocaleString()+" Tk",
+	}); 
+	
+}
+
+////////////ends daily collection grid//////////////
+
+
+
+reloadDailyCollGrid();
+$('#customer_id').focus();
+
+
+
+ 	

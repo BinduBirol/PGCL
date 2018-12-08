@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="PGCL"
+  id="myeclipse.1443082662476"
+  context-root="/PGCL_WEB"
+  j2ee-spec="5.0"
+  archive="PGCL.war">
+  <attributes>
+    <attribute name="webrootdir" value="PGCL_WEB" />
+  </attributes>
+</project-module>
+

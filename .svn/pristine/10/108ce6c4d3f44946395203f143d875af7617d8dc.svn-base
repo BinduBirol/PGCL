@@ -1,0 +1,29 @@
+package org.pgcl.enums;
+
+public enum  DisconnCause {
+
+	ILLEGAL_CONNECTION(0,"Illegal Connection"),
+    GAS_BILL_DUE(1,"Gas Bill Due"),
+    APPLIED_BY_CUSTOMER(2,"Applied by Customer"),
+	METER_REPLACEMNT(3,"Due to meter replacment"),
+	NATURAL_CALAMITY(4,"Due to natural calamity"),
+	GOVT_TRANSFER(5,"Due to Govt Transfer"),
+	TYPE_CHANGE(6,"Customer Type Change");
+
+    private String label;
+    private int id;
+
+    private DisconnCause(int id,String label) {
+        this.id=id;
+    	this.label = label;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+    public int getId() {
+        return id;
+    }
+
+    
+}

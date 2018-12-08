@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+    "../../dtds/struts-2.3.dtd">
+<!--
+  - This file is included by the struts.xml file as an example
+  - of how to break up the configuration file into multiple files.
+-->
+<struts>
+  <package name="reports"  extends="struts-securityaddon">
+  <!--  [Start] Reports[Master Data] -->	
+	<action name="customerCategoryReport"  class="org.pgcl.reports.masterData.CustomerCategory">
+		<result type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">inputStream</param>
+		</result>	
+	</action>
+	<action name="designationReport"  class="org.pgcl.reports.masterData.Designation">
+		<result type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">inputStream</param>
+		</result>	
+	</action>
+	
+	<action name="userReport"  class="org.pgcl.reports.masterData.User">
+		<result type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">inputStream</param>
+		</result>	
+	</action>
+	<action name="employeeReport"  class="org.pgcl.reports.masterData.Employee">
+		<result type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">inputStream</param>
+		</result>	
+	</action>
+		
+	<action name="ministryReport"  class="org.pgcl.reports.masterData.Ministry">
+		<result type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">inputStream</param>
+		</result>	
+	</action>
+	
+	<action name="areaReport"  class="org.pgcl.reports.masterData.Area">
+		<result type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">inputStream</param>
+		</result>	
+	</action>
+	
+	<action name="meterStatusReport"  class="org.pgcl.reports.masterData.MeterStatus">
+		<result type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">inputStream</param>
+		</result>	
+	</action>
+	
+	
+	
+	<action name="meterGRatingReport"  class="org.pgcl.reports.masterData.MeterGRating">
+		<result type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">inputStream</param>
+		</result>	
+	</action>
+	
+	<action name="tariffRateReport"  class="org.pgcl.reports.masterData.TariffRate">
+		<result type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">inputStream</param>
+		</result>	
+	</action>
+	
+	<action name="bankInformationReport"  class="org.pgcl.reports.masterData.BankInformation">
+		<result type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">inputStream</param>
+		</result>	
+	</action>
+	
+	<action name="depositTypeReport"  class="org.pgcl.reports.masterData.DepositType">
+		<result type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">inputStream</param>
+		</result>	
+	</action>
+	
+		
+	<action name="meterManufacturerReport"  class="org.pgcl.reports.masterData.MeterManufacturer">
+		<result type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">inputStream</param>
+		</result>	
+	</action>
+	
+	<action name="meterTypeReport"  class="org.pgcl.reports.masterData.MeterType">
+		<result type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">inputStream</param>
+		</result>	
+	</action>					
+<!--  [End] Reports[Master Data] -->
+
+<!-- [Start] Sales Statement -->
+
+	<action name="monthlySalesStmtReport"  class="org.pgcl.reports.MonthlySalesStatement">
+		<result type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">inputStream</param>
+		</result>	
+	</action>
+	
+		<action name="nonmeterLoadIncraseInfo"  class="org.pgcl.reports.NonmeterLoadIncraseReport">
+		<result type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">inputStream</param>
+		</result>	
+	</action>
+	
+	<action name="nonmeterReconnectionInfo"  class="org.pgcl.reports.NonMeterReconnectionReport">
+		<result type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">inputStream</param>
+		</result>	
+	</action>
+	
+	<action name="nonmeterConnectionInfo"  class="org.pgcl.reports.NonMeterConnectionReport">
+		<result type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">inputStream</param>
+		</result>	
+	</action>
+	<action name="nonmeterDisconnectionInfo"  class="org.pgcl.reports.NonMeterDisconnectionReport">
+		<result type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">inputStream</param>
+		</result>	
+	</action>
+	
+	<action name="meterReadingInfo"  class="org.pgcl.reports.MeterReadingReport">
+		<result type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">inputStream</param>
+		</result>	
+	</action>
+	
+	<action name="securityDepositInfo"  class="org.pgcl.reports.DepositReport">
+		<result type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">inputStream</param>
+		</result>	
+	</action>
+	
+	<action name="defaulterCustomerInfo"  class="org.pgcl.reports.DefaulterCustomerList">
+		<result type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">inputStream</param>
+		</result>	
+	</action>
+	
+	<action name="maximumLoadExceedInfo"  class="org.pgcl.reports.MaximumLoadExceedReport">
+		<result type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">inputStream</param>
+		</result>	
+	</action>
+	<action name="securityDepositRequiredInfo"  class="org.pgcl.reports.SecurityDepositRequiredReport">
+		<result type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">inputStream</param>
+		</result>	
+	</action>
+	
+	<action name="advancePaidCustomerInfo"  class="org.pgcl.reports.AdvancedPaidCustomerListReport">
+		<result type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">inputStream</param>
+		</result>	
+	</action>
+	<action name="monthlyCollectionStmntReport"  class="org.pgcl.reports.MonthlyCollectionReport">
+		<result type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">inputStream</param>
+		</result>	
+	</action>
+	
+	<action name="collectionStatementInfo"  class="org.pgcl.reports.CollectionBankStatement">
+		<result type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">inputStream</param>
+		</result>	
+	</action>
+	
+	<action name="bankBookInfo"  class="org.pgcl.reports.BankBookRevenue">
+		  <result type="stream">
+		    <param name="contentType">application/pdf</param>
+		    <param name="inputName">inputStream</param>
+		  </result> 
+ 	</action>
+ 	
+ 	<action name="ministryReportInfo"  class="org.pgcl.reports.MinistryWiseDueReport">
+		  <result type="stream">
+		    <param name="contentType">application/pdf</param>
+		    <param name="inputName">inputStream</param>
+		  </result> 
+ 	</action>
+ 	
+ 	<action name="ministryReportInfoHO"  class="org.pgcl.reports.MinistryWiseDueReportHeadOfice">
+		  <result type="stream">
+		    <param name="contentType">application/pdf</param>
+		    <param name="inputName">inputStream</param>
+		  </result> 
+ 	</action>
+	
+	
+	<action name="marginCalculationInfo"  class="org.pgcl.reports.MarginCalculationReport">
+		<result type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">inputStream</param>
+		</result>	
+	</action>
+	<action name="clearnessCertificateInfo"  class="org.pgcl.reports.DefaulterCertificate">
+	  <result type="stream">
+	    <param name="contentType">application/pdf</param>
+	    <param name="inputName">inputStream</param>
+	  </result> 
+	</action>
+	
+	<action name="reconciliationReport"  class="org.pgcl.reports.ReconciliationReport">
+	  <result type="stream">
+	    <param name="contentType">application/pdf</param>
+	    <param name="inputName">inputStream</param>
+	  </result> 
+	</action>
+	
+	<action name="yearlyBalanceSheetInfo"  class="org.pgcl.reports.YearlyBalanceSheet">
+		<result type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">inputStream</param>
+		</result>	
+	</action>
+	
+	<action name="disconnInfo"  class="org.pgcl.reports.DisconnectionDetails">
+		<result type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">inputStream</param>
+		</result>	
+	</action>
+	
+	<action name="gasConsumptionInfo"  class="org.pgcl.reports.GasConsumptionReport">
+		<result type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">inputStream</param>
+		</result>	
+	</action>
+	
+	<action name="variousMarginInfo"  class="org.pgcl.reports.VariousMarginReport">
+		<result type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">inputStream</param>
+		</result>	
+	</action>
+	<action name="balanceSheetInfo"  class="org.pgcl.reports.CustomerBalanceSheet">
+		<result type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">inputStream</param>
+		</result>	
+	</action>
+	<action name="nonMeterBillSummeryReport"  class="org.pgcl.reports.NonMeterBillSummeryReport">
+		<result type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">inputStream</param>
+		</result>	
+	</action>
+	
+	<action name="vatRebateInfo"  class="org.pgcl.reports.VatTaxFFReport">
+  		<result type="stream">
+    		<param name="contentType">application/pdf</param>
+    		<param name="inputName">inputStream</param>
+  		</result> 
+ 	</action>
+	<action name="accountsPayableInfo"  class="org.pgcl.reports.AccountsPayableReport">
+	  	<result type="stream">
+	    	<param name="contentType">application/pdf</param>
+	    	<param name="inputName">inputStream</param>
+	  	</result> 
+	 </action>
+	 <action name="securityBankBookInfo"  class="org.pgcl.reports.SecurityBankBook">
+	  	<result type="stream">
+	    	<param name="contentType">application/pdf</param>
+	    	<param name="inputName">inputStream</param>
+	  	</result> 
+	 </action>
+
+	  <action name="securityAdjustInfo"  class="org.pgcl.reports.SecurityAdjustReport">
+	  	<result type="stream">
+	    	<param name="contentType">application/pdf</param>
+	    	<param name="inputName">inputStream</param>
+	  	</result> 
+	 </action>
+	 <action name="jvInfo"  class="org.pgcl.reports.JournalVoucher">
+	  	<result type="stream">
+	    	<param name="contentType">application/pdf</param>
+	    	<param name="inputName">inputStream</param>
+	  	</result> 
+	 </action>
+	  <action name="securityNoticeInfo"  class="org.pgcl.reports.SecurityNotice">
+	  	<result type="stream">
+	    	<param name="contentType">application/pdf</param>
+	    	<param name="inputName">inputStream</param>
+	  	</result> 
+	 </action>
+	 <action name="monthlySalesSummaryReport"  class="org.pgcl.reports.MonthlySalesSummary">
+	  	<result type="stream">
+	    	<param name="contentType">application/pdf</param>
+	    	<param name="inputName">inputStream</param>
+	  	</result> 
+	 </action>
+	 <action name="custListInfo"  class="org.pgcl.reports.CustomerListReport">
+	  	<result type="stream">
+	    	<param name="contentType">application/pdf</param>
+	    	<param name="inputName">inputStream</param>
+	  	</result> 
+	 </action>
+	 
+  <action name="certificationSummeryReport"  class="org.pgcl.reports.CertificationSummaryReport">
+	  	<result type="stream">
+	    	<param name="contentType">application/pdf</param>
+	    	<param name="inputName">inputStream</param>
+	  	</result> 
+	 </action>	
+	 <action name="totalSecurityInfo"  class="org.pgcl.reports.TotalSecurityDepositReport">
+	  	<result type="stream">
+	    	<param name="contentType">application/pdf</param>
+	    	<param name="inputName">inputStream</param>
+	  	</result> 
+	 </action>
+	 <action name="areaSecurityInfo"  class="org.pgcl.reports.AreaWiseSecurityReport">
+	  	<result type="stream">
+	    	<param name="contentType">application/pdf</param>
+	    	<param name="inputName">inputStream</param>
+	  	</result> 
+	 </action>
+	 <action name="purchasejvInfo"  class="org.pgcl.reports.JVPurchaseReport">
+	  	<result type="stream">
+	    	<param name="contentType">application/pdf</param>
+	    	<param name="inputName">inputStream</param>
+	  	</result> 
+	 </action>
+	 <action name="salesjvInfo"  class="org.pgcl.reports.JVSalesStatement">
+	  	<result type="stream">
+	    	<param name="contentType">application/pdf</param>
+	    	<param name="inputName">inputStream</param>
+	  	</result> 
+	 </action>
+	 <action name="tdsjvInfo"  class="org.pgcl.reports.TDSReport">
+	  	<result type="stream">
+	    	<param name="contentType">application/pdf</param>
+	    	<param name="inputName">inputStream</param>
+	  	</result> 
+	 </action>
+	 
+	 <action name="freedomjvInfo"  class="org.pgcl.reports.FreedomFighterJV">
+	  	<result type="stream">
+	    	<param name="contentType">application/pdf</param>
+	    	<param name="inputName">inputStream</param>
+	  	</result> 
+	 </action>
+	 <action name="bankBookjvInfo"  class="org.pgcl.reports.BankBookJV">
+		  <result type="stream">
+		    <param name="contentType">application/pdf</param>
+		    <param name="inputName">inputStream</param>
+		  </result> 
+ 	</action>
+ 	<action name="securitybankBookjvInfo"  class="org.pgcl.reports.SecurityBankBookJV">
+		  <result type="stream">
+		    <param name="contentType">application/pdf</param>
+		    <param name="inputName">inputStream</param>
+		  </result> 
+ 	</action>
+ 	<action name="vatRebatejvInfo"  class="org.pgcl.reports.VatRevateJV">
+		  <result type="stream">
+		    <param name="contentType">application/pdf</param>
+		    <param name="inputName">inputStream</param>
+		  </result> 
+ 	</action>
+ 	<action name="sgInfo"  class="org.pgcl.reports.SGFLPayableReport">
+		  <result type="stream">
+		    <param name="contentType">application/pdf</param>
+		    <param name="inputName">inputStream</param>
+		  </result> 
+ 	</action>
+ 	<action name="bgInfo"  class="org.pgcl.reports.BGFCLPayableReport">
+		  <result type="stream">
+		    <param name="contentType">application/pdf</param>
+		    <param name="inputName">inputStream</param>
+		  </result> 
+ 	</action>
+ 	<action name="avalueInfo"  class="org.pgcl.reports.AssetValueReport">
+		  <result type="stream">
+		    <param name="contentType">application/pdf</param>
+		    <param name="inputName">inputStream</param>
+		  </result> 
+ 	</action>
+ 	<action name="bapexInfo"  class="org.pgcl.reports.BAPEXReport">
+		  <result type="stream">
+		    <param name="contentType">application/pdf</param>
+		    <param name="inputName">inputStream</param>
+		  </result> 
+ 	</action>
+ 	<action name="distInfo"  class="org.pgcl.reports.DistributionMarginReport">
+		  <result type="stream">
+		    <param name="contentType">application/pdf</param>
+		    <param name="inputName">inputStream</param>
+		  </result> 
+ 	</action>
+ 	<action name="dwmbInfo"  class="org.pgcl.reports.DWMBReport">
+		  <result type="stream">
+		    <param name="contentType">application/pdf</param>
+		    <param name="inputName">inputStream</param>
+		  </result> 
+ 	</action>
+ 	<action name="gdfInfo"  class="org.pgcl.reports.GDFPayableReport">
+		  <result type="stream">
+		    <param name="contentType">application/pdf</param>
+		    <param name="inputName">inputStream</param>
+		  </result> 
+ 	</action>
+ 	<action name="pdfInfo"  class="org.pgcl.reports.PDFMarginReport">
+		  <result type="stream">
+		    <param name="contentType">application/pdf</param>
+		    <param name="inputName">inputStream</param>
+		  </result> 
+ 	</action>
+ 	<action name="gtclInfo"  class="org.pgcl.reports.GTCLReport">
+		  <result type="stream">
+		    <param name="contentType">application/pdf</param>
+		    <param name="inputName">inputStream</param>
+		  </result> 
+ 	</action>
+ 	
+ 	<action name="sdAdjvInfo"  class="org.pgcl.reports.SecurityAdjustmentJV">
+		  <result type="stream">
+		    <param name="contentType">application/pdf</param>
+		    <param name="inputName">inputStream</param>
+		  </result> 
+ 	</action>
+ 	
+ 	
+ 	
+<!-- [End] Sales Statement -->
+<!-- [Start] Security Deposit Report -->
+	<action name="securityDepositExpireReport"  class="org.pgcl.reports.SecurityDepositExpireReport">
+		<result type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="inputName">inputStream</param>
+		</result>	
+	</action>
+<!-- [End] Security Deposit Report -->
+
+</package>
+
+</struts>

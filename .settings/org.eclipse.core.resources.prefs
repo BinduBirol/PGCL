@@ -1,0 +1,10 @@
+#Fri Dec 23 08:26:59 PKT 2016
+eclipse.preferences.version=1
+encoding//PGCL_WEB/WEB-INF/jsp/billing/BillAdjustmentOtherHome.jsp=UTF-8
+encoding//PGCL_WEB/WEB-INF/jsp/customer/DemandNote.jsp=UTF-8
+encoding//developer/database/Scripts.sql=UTF-8
+encoding//src/org/pgcl/reports/template/MeteredBillFormat.java=UTF-8
+encoding//src/org/pgcl/reports/template/MeteredBillFormatWithData.java=UTF-8
+encoding//src/org/pgcl/reports/template/SinglePageBilling.java=UTF-8
+encoding//src/org/pgcl/reports/template/SinglePageBillingFinal.java=UTF-8
+encoding//src/org/pgcl/reports/template/SinglePageInstallmentBilling.java=UTF-8
